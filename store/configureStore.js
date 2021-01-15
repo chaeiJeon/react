@@ -13,7 +13,7 @@ const configureStore = () =>{
     하지만 개발자용일때는 devtools를 연결해서 history가 쌓이게 한다
     배포용일때는 history를 쌓아두지 않고 계속 버림 */}
     const store = createStore(reducer);
-    store.dispatch({
+    store.dispatch({ 
         type : 'CHANGE_NICKNAME',
         data : '채원',
     })

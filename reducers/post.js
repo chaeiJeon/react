@@ -25,7 +25,7 @@ export const initialState = {
             },
             content : '언제 나와용',
             },
-        ],
+        ]
     }],
     imagePath : [],
     postAdded: false,
@@ -40,7 +40,7 @@ export const addPost={
 
 }
 const dummyPost = {
-    id=2,
+    id:2,
     content : '더미데이터',
     User : {
         id:1,
@@ -51,13 +51,20 @@ const dummyPost = {
 
 };
 
-const reducer = (state=initialState, action)=>{
+export default (state=initialState, action)=>{
     switch(action.type){
         case ADD_POST:
+            return{
+                ...state,
+                mainPosts: [dummyPost, ...state.mainPosts],
+                // 원래 state.mainPosts들의 앞에 dummyPost를 추가하겠다는 의미
+                postAdded : true,
+            };
 
-        default : 
-            return state;
+        default : {
+            return {
+                ...state,
+            };
+        }
     }
 };
-
-export default reducer;
