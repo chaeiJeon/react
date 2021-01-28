@@ -15,7 +15,7 @@ export default function* rootSaga() {
        fork(postSaga),
        fork(userSaga),
        //saga는 combinereducer 필요없음
-   ])
+   ]);
    // all은 배열을 받아서 배열 안에 있는 것을 한번에 실행해준다
    // fork는 함수를 실행한다는 뜻
    // fork 대신 call도 쓰지만 둘의 차이점이 있음

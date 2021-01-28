@@ -66,7 +66,6 @@ const dummyPost = (data) => ({
     },
     Images : [],
     Comments : [],
-
 });
 
 export default (state=initialState, action)=>{
@@ -78,14 +77,13 @@ export default (state=initialState, action)=>{
                 addPostDone : false,
                 addPostError : null,
             };
-        case ADD_POST_SUCCESS:{
-            console.log('add success')
+        case ADD_POST_SUCCESS:
             return{
                 ...state,
                 mainPosts : [dummyPost(action.data), ...state,mainPosts],
                 addPostLoading : false,
                 addPostDone : true,
-            };}
+            };
         case ADD_POST_FAILURE:
             return{
                 ...state,
