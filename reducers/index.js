@@ -3,23 +3,6 @@ import { combineReducers } from 'redux';
 import user from './user';
 import post from './post';
 
-const initialState = {
-    user : {
-    },
-    post : {
-    }
-};
-
-
-
-const changeNickname = ( data ) => {
-    return {
-        type : 'CHANGE_NICKNAME',
-        data,
-    }
-};
-// data만 적혀있는데 원래는 data:data 이다
-
 
 // 이전상태와 액션을 활용해서 다음상태를 만든다
 const rootReducer = combineReducers({

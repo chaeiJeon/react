@@ -13,8 +13,7 @@ const SearchInput = styled(Input.Search)`
 `;
 
 const AppLayout = ({children})=>{
-    const isLoggedIn = useSelector((state)=>state.user.isLoggedIn);
-
+    const { me } = useSelector((state)=>state.user);
 
     return (
         <div>
@@ -35,7 +34,7 @@ const AppLayout = ({children})=>{
             <Row gutter={18}>
                 {/* gutter은 25% 50% 25% 그 사이 간격주기 */}
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile /> : <LoginForm/>}
+                    {me ? <UserProfile /> : <LoginForm/>}
                 </Col>
                 <Col xs={24} md={12}>
                     {children}
@@ -55,7 +54,7 @@ const AppLayout = ({children})=>{
         </div>
     );
 };
-AppLayout.prototype={
+AppLayout.propTypes={
     children:PropTypes.node.isRequired,
     //return 안에 들어갈 수 있는 것이 모두 node
 };
