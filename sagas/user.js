@@ -1,9 +1,45 @@
 import {all, delay, put, fork, takeLatest} from 'redux-saga/effects';
 import axios from 'axios';
-import {LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, 
+import {
+    FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE, 
+    UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE, 
+    LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, 
     LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE,
     SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS,} from '../reducers/user';
-
+function followAPI(){
+    return axios.follow('/api/follow')
+}
+function* follow(action){
+    try{
+        yield delay(1000);
+        yield put({
+            type : FOLLOW_SUCCESS,
+            data : action.data,
+        })
+    }catch(err){
+        yield put({
+            type : FOLLOW_FAILURE,
+            error : err.response.data,
+        })
+    }
+}
+function unfollowAPI(){
+    return axios.unfollow('/api/unfollow')
+}
+function* unfollow(action){
+    try{
+        yield delay(1000);
+        yield put({
+            type : UNFOLLOW_SUCCESS,
+            data : action.data,
+        })
+    }catch(err){
+        yield put({
+            type : UNFOLLOW_FAILURE,
+            error : err.response.data,
+        })
+    }
+}
 function logInAPI(data){
     return axios.post('/api/login', data)
 }
@@ -60,6 +96,13 @@ function* signUp(){
         })
     }
 }
+function* watchFollow(){
+    yield takeLatest(FOLLOW_REQUEST, follow);
+    
+}function* watchUnfollow(){
+    yield takeLatest(UNFOLLOW_REQUEST, unfollow);
+    
+}
 function* watchLogIn(){
     yield takeLatest(LOG_IN_REQUEST,logIn); 
     /* while(true){ //while로 감싸줘야 로그인하고 로그아웃하고 또 로그인 가능, while로 안감싸주면 로그인 딱 한번만 가능
@@ -81,6 +124,8 @@ function* watchSignUp(){
 
 export default function* userSaga(){
     yield all([
+        fork(watchFollow),
+        fork(watchUnfollow),
         fork(watchLogIn),
         fork(watchLogOut),
         fork(watchSignUp),
