@@ -1,4 +1,4 @@
-import {all, delay, put, fork, takeLatest} from 'redux-saga/effects';
+import {all, delay, put, fork, takeLatest, call} from 'redux-saga/effects';
 import axios from 'axios';
 import {
     FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE, 
@@ -7,7 +7,7 @@ import {
     LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE,
     SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS,} from '../reducers/user';
 function followAPI(){
-    return axios.follow('/api/follow')
+    return axios.follow('/user/follow')
 }
 function* follow(action){
     try{
@@ -24,7 +24,7 @@ function* follow(action){
     }
 }
 function unfollowAPI(){
-    return axios.unfollow('/api/unfollow')
+    return axios.unfollow('/user/unfollow')
 }
 function* unfollow(action){
     try{
@@ -41,17 +41,16 @@ function* unfollow(action){
     }
 }
 function logInAPI(data){
-    return axios.post('/api/login', data)
+    return axios.post('/user/login', data)
 }
 function* logIn(action){
     try{
-        console.log('saga logIn');
-        yield delay(1000); /* result = yield call(logInAPI, action.data) 아직은 서버가 없으니*/
+        const result = yield call(logInAPI, action.data);
         // call의 첫번째 인자는 함수명, 그다음부터는 매개변수들
         // 만약 서버로 로그인하는 요청을 보냈으면 그 결과를 받는 것
         yield put({
             type : LOG_IN_SUCCESS,
-            data : action.data,
+            data : result.data,
         })
     } catch(err){ //서버 요청 실패시
         yield put({ //put=dispatch 라고 생각하기, 액션 객체 dispatch
@@ -62,7 +61,7 @@ function* logIn(action){
 }
 
 function logOutAPI(){
-    return axios.post('/api/logout')
+    return axios.post('/user/logout')
 }
 function* logOut(){
     try{
@@ -80,12 +79,13 @@ function* logOut(){
     }
 }
 
-function signUpAPI(){
-    return axios.signup('/api/signup')
+function signUpAPI(data){
+    return axios.post('/user', data) // 백엔드 주소 적기
 }
-function* signUp(){
+function* signUp(action){
     try{
-        yield delay(1000);
+        const result = yield call(signUpAPI, action.data);
+        console.log(result);
         yield put({
             type : SIGN_UP_SUCCESS,
         })
